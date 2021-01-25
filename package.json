@@ -1,0 +1,34 @@
+{
+  "name": "learnwebgpu",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "dev:watch": "ts-node-dev --respawn src/index.ts",
+    "build": "npm-run-all clean tsc",
+    "clean": "rimraf dist/*",
+    "tsc": "tsc",
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/butibuti/LearnWebGPU.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/butibuti/LearnWebGPU/issues"
+  },
+  "homepage": "https://github.com/butibuti/LearnWebGPU#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "typescript": "^4.1.3"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.1.1",
+    "ts-node-dev": "^1.1.1"
+  }
+}
