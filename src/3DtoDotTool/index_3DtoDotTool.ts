@@ -5,7 +5,6 @@ window.addEventListener("DOMContentLoaded", init);
 
 function init() {
     
-    console.log("Hello World");
     const width = 960;
   const height = 540;
 
