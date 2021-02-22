@@ -1,6 +1,4 @@
-
 import THREE = require("three");
-import $ = require("jquery");
 window.addEventListener("DOMContentLoaded", init);
 
 
