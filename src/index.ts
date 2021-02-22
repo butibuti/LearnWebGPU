@@ -22,6 +22,7 @@ router.get('/games/', (req, res) => res.render('pages/game'));
 router.get('/games/game_find', (req, res) => res.render('pages/game_find'));
 router.get('/games/game_magurossy', (req, res) => res.render('pages/game_magurossy'));
 router.get('/games/game_jetSaber', (req, res) => res.render('pages/game_jetSaber'));
+router.get('/tool/tool_3DtoDot', (req, res) => res.render('pages/tool_3DtoDot'));
 app.use(router);
 
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
