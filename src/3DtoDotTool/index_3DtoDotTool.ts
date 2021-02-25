@@ -67,7 +67,7 @@ class CameraWrapper{
         arg_far
       );
     }else{
-      this.camera=new  THREE.OrthographicCamera(0,arg_width,0,arg_height,arg_near,arg_height);
+      this.camera=new  THREE.OrthographicCamera(-arg_width/2,arg_width/2,-arg_height/2,arg_height/2,arg_near,arg_height);
     }
   }
   get Camera():THREE.Camera{
@@ -103,7 +103,7 @@ class EditorCameraMan extends IObject.IObject{
   }
   OnMouseWheel(e:WheelEvent):void{
     const vector=e.deltaY;
-    this.camera.Camera.translateOnAxis(new THREE.Vector3(0,0,1),vector*0.01);
+    this.camera.Camera.translateOnAxis(new THREE.Vector3(0,0,1),vector*0.001);
   }
   OnMouseMove(e:MouseEvent):void{
     if(this.isClick_L){
@@ -143,6 +143,29 @@ void main( void ) {
 }
 `
 
+const vertex_default= `
+varying vec2 vUv;
+void main() {
+  vUv=uv;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.);
+}
+`
+
+const frag_post = `
+varying vec2 vUv;
+uniform sampler2D uTex;
+void main() {
+
+  vec3 color= texture2D(uTex, vUv).rgb;
+  float postValue=8.0f;
+  float r=float(floor(color.r*postValue))/(postValue);
+  float g=float(floor(color.g*postValue))/(postValue);
+  float b=float(floor(color.b*postValue))/(postValue);
+
+  gl_FragColor = vec4(r,g,b , 1.0 );
+}
+`
+
 class OutlineUniform extends IObject.IObject{
   range:HTMLInputElement;
   value: {
@@ -179,22 +202,43 @@ function init() {
   const width = 960;
   const height = 540;
 
-  // レンダラーを作成
   var canvas :HTMLCanvasElement= document.getElementById('myCanvas') as HTMLCanvasElement;
 
   
-
-  const renderer = new THREE.WebGLRenderer({canvas  });
+  
+  const renderer = new THREE.WebGLRenderer({canvas:canvas  });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(width, height);
   renderer.setClearColor(0xffffff);
+
+
   // シーンを作成
   const scene = new SceneWrapper();
+  const subScene = new SceneWrapper();
+
+var renderTarget = new THREE.WebGLRenderTarget(width/8, height/8);
+renderTarget.texture.minFilter = THREE.LinearFilter;
+
+const geometry = new THREE.PlaneGeometry(width,height);
+
+var planeMat =  new THREE.ShaderMaterial({
+  vertexShader:vertex_default,
+  fragmentShader: frag_post,
+  side: THREE.DoubleSide, 
+  uniforms: {
+    uTex: { value: renderTarget.texture }// テスクチャを uTex として渡す
+  },
+})
+  var plane= new THREE.Mesh(geometry,planeMat);
+  plane.scale.y=-1;
+  subScene.AddDrawObject(plane,"dotPlane");
 
   // カメラを作成
   const camera = new CameraWrapper(45,width, height,0.01,10000,true );
+  const dotCamera = new CameraWrapper(45,width, height,0.01,10000,false );
   camera.Camera.position.set(0, 1, 2);
-  
+  dotCamera.Camera.position.set(0,0,2);
+
   const uniform =new OutlineUniform();
 
   const outlineMaterial = new THREE.ShaderMaterial({
@@ -219,14 +263,18 @@ function init() {
   })
     scene.AddDrawObject(gltf.scene,"model"); 
     scene.AddDrawObject(model,"outlineModel"); 
+
+    gltf.scene.add(model);
+
   });
   renderer.outputEncoding = THREE.GammaEncoding;
   
   const light = new THREE.DirectionalLight(0xffffff);
   light.intensity = 2; // 光の強さを倍に
-  light.position.set(1, 1, 1);
+  light.position.set(1, 1, -1);
   // シーンに追加
   scene.AddDrawObject(light,"DirectionaLight");
+  subScene.AddDrawObject(light,"dirLight");
   var model1:THREE.Object3D;
   var outlineModel:THREE.Object3D;
 
@@ -237,6 +285,7 @@ function init() {
   IObject.EventManager.RegistMouseMoveEvent(cameraController,"cameraController",canvas);
   IObject.EventManager.RegistWheelEvent(cameraController,"cameraController",canvas);
   
+
   // 初回実行
   tick();
 
@@ -247,14 +296,11 @@ function init() {
     }else{
       model1=scene.GetDrawObject("model");
     }
-    if(outlineModel){
-      outlineModel.rotation.y+=0.1;
-    }else{
-      outlineModel=scene.GetDrawObject("outlineModel");
-    }
     // レンダリング
+    renderer.setRenderTarget(renderTarget);
     renderer.render(scene.Scene, camera.Camera);
+    renderer.setRenderTarget(null);
+    renderer.render(subScene.Scene,dotCamera.Camera);
   }
 
 }
-
