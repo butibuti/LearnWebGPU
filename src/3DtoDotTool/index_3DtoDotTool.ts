@@ -272,7 +272,7 @@ var animations: THREE.AnimationClip[]
 var model1:THREE.Object3D;
 var outlineModel:THREE.Object3D;
 
-  ModelLoad('../model/miruku/scene.gltf');
+  ModelLoad('../../model/miruku/scene.gltf');
   
   {
 
