@@ -126,15 +126,17 @@ class RendererWrapper{
   }
 }
 
-
-const outlineVertexShader = `
-
-uniform float uOffset;
-void main() {
-  vec3 _position = position + normal * uOffset; 
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(_position, 1.);
-}
-`
+const outlineVertexShader =  [
+  "uniform float offset;",
+  THREE.ShaderChunk["common"],
+  THREE.ShaderChunk["skinning_pars_vertex"], 
+  "void main() {",
+     "vec3 transformed = vec3(position + normal * offset);",
+     THREE.ShaderChunk["skinbase_vertex"],
+     THREE.ShaderChunk["skinning_vertex"],
+     THREE.ShaderChunk["project_vertex"],
+  "}"
+].join( "\n" )
 
 const fragOut = `
 uniform vec3 uOutlineColor;
@@ -156,68 +158,80 @@ varying vec2 vUv;
 uniform sampler2D uTex;
 void main() {
 
-  vec3 color= texture2D(uTex, vUv).rgb;
+  vec4 color= texture2D(uTex, vUv);
   float postValue=8.0f;
   float r=float(floor(color.r*postValue))/(postValue);
   float g=float(floor(color.g*postValue))/(postValue);
   float b=float(floor(color.b*postValue))/(postValue);
 
-  gl_FragColor = vec4(r,g,b , 1.0 );
+  gl_FragColor = vec4(r,g,b , color.a );
 }
 `
 
 class OutlineUniform extends IObject.IObject{
   range:HTMLInputElement;
+  color:HTMLInputElement;
+
   value: {
     uOutlineColor: {
         value: THREE.Color;
     };
-    uOffset: {
+    offset: {
         value: number;
     };
 }
 
   OnMouseMove(event:MouseEvent){
-    this.value.uOffset.value=Number( this.range.value) *0.001;
+    this.value.offset.value=Number( this.range.value) *0.001;
+  }
+  OnInputChange(event:InputEvent){
+    this.value.uOutlineColor.value=new THREE.Color(( this.color.value));
   }
 
   constructor(){
     super();
     this.value= {
       uOutlineColor: {
-        value: new THREE.Color(0x0f0fff),
+        value: new THREE.Color(0x000000),
       },
-      uOffset:{
+      offset:{
         value:0.02
       }
     }
     this.range=document.getElementById("outlineOffset")as HTMLInputElement;
+    this.color=document.getElementById("outlineColor") as HTMLInputElement;
     IObject.EventManager.RegistMouseMoveEvent(this,"range",this.range);
-    this.range.value=(this.value.uOffset.value*1000).toString();
+    IObject.EventManager.RegistInputChangeEvent(this,"color",this.color);
+    this.range.value=(this.value.offset.value*1000).toString();
   }
 }
 
 function init() {
-  document.body.oncontextmenu = function () {return false;}
-  const width = 960;
-  const height = 540;
+  const width = 512;
+  const height = 512;
 
   var canvas :HTMLCanvasElement= document.getElementById('myCanvas') as HTMLCanvasElement;
 
+  canvas.oncontextmenu = function () {return false;};
+  canvas.addEventListener('mousewheel', function(event) {event.preventDefault()}, { passive: false });
   
-  
-  const renderer = new THREE.WebGLRenderer({canvas:canvas  });
+  const renderer = new THREE.WebGLRenderer({canvas:canvas,alpha:true  });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(width, height);
-  renderer.setClearColor(0xffffff);
+  renderer.setClearColor(0x0000ff,0.0);
+  renderer.outputEncoding = THREE.GammaEncoding;
 
 
   // シーンを作成
   const scene = new SceneWrapper();
   const subScene = new SceneWrapper();
 
-var renderTarget = new THREE.WebGLRenderTarget(width/8, height/8);
-renderTarget.texture.minFilter = THREE.LinearFilter;
+var renderTarget = new THREE.WebGLRenderTarget(width/8, height/8,{
+
+  magFilter: THREE.NearestFilter,
+  minFilter: THREE.NearestFilter,
+
+});
 
 const geometry = new THREE.PlaneGeometry(width,height);
 
@@ -225,6 +239,7 @@ var planeMat =  new THREE.ShaderMaterial({
   vertexShader:vertex_default,
   fragmentShader: frag_post,
   side: THREE.DoubleSide, 
+  transparent: true,
   uniforms: {
     uTex: { value: renderTarget.texture }// テスクチャを uTex として渡す
   },
@@ -245,38 +260,29 @@ var planeMat =  new THREE.ShaderMaterial({
     vertexShader: outlineVertexShader, // 頂点シェーダ
     fragmentShader: fragOut, // フラグメントシェーダ,
     side: THREE.BackSide,
-    uniforms: uniform.value
+    uniforms: uniform.value,
+    skinning:true
   })
 
 
+var mixer:THREE.AnimationMixer;
+var outlineMixer:THREE.AnimationMixer;
+var animationIndex:number=0;
+var animations: THREE.AnimationClip[]
+var model1:THREE.Object3D;
+var outlineModel:THREE.Object3D;
 
-
-  const　gltfLoader = new GLTFLoader();
-  gltfLoader.load('../model/miruku/scene.gltf',function(data){
-    const gltf = data;
-    var model = gltf.scene.clone();
-
-    model.traverse((object) => { //モデルの構成要素をforEach的に走査
-      if(object instanceof THREE.Mesh) { //その構成要素がメッシュだったら
-    object .material=outlineMaterial;
-}
-  })
-    scene.AddDrawObject(gltf.scene,"model"); 
-    scene.AddDrawObject(model,"outlineModel"); 
-
-    gltf.scene.add(model);
-
-  });
-  renderer.outputEncoding = THREE.GammaEncoding;
+  ModelLoad('../model/miruku/scene.gltf');
   
-  const light = new THREE.DirectionalLight(0xffffff);
-  light.intensity = 2; // 光の強さを倍に
-  light.position.set(1, 1, -1);
-  // シーンに追加
-  scene.AddDrawObject(light,"DirectionaLight");
-  subScene.AddDrawObject(light,"dirLight");
-  var model1:THREE.Object3D;
-  var outlineModel:THREE.Object3D;
+  {
+
+    const light = new THREE.DirectionalLight(0xffffff);
+    light.intensity = 2; // 光の強さを倍に
+    light.position.set(1, 1, -1);
+    // シーンに追加
+    scene.AddDrawObject(light,"DirectionaLight");
+    subScene.AddDrawObject(light,"dirLight");
+  }
 
   var cameraController=new EditorCameraMan(camera);
 
@@ -285,16 +291,21 @@ var planeMat =  new THREE.ShaderMaterial({
   IObject.EventManager.RegistMouseMoveEvent(cameraController,"cameraController",canvas);
   IObject.EventManager.RegistWheelEvent(cameraController,"cameraController",canvas);
   
+  let clock = new THREE.Clock();
+
+  
+  const downloadButton=document.getElementById("dwonloadButton") as HTMLInputElement;
+  
+  downloadButton.addEventListener("click",canvasDownload,true);
 
   // 初回実行
   tick();
 
   function tick() {
     requestAnimationFrame(tick);
-    if(model1){
-      model1.rotation.y+=0.1;
-    }else{
-      model1=scene.GetDrawObject("model");
+    if(mixer){
+      mixer.update(clock.getDelta());
+      outlineMixer.update(clock.getDelta());
     }
     // レンダリング
     renderer.setRenderTarget(renderTarget);
@@ -303,4 +314,73 @@ var planeMat =  new THREE.ShaderMaterial({
     renderer.render(subScene.Scene,dotCamera.Camera);
   }
 
+
+  function OnBefAnimPush(e:Event){
+    
+    animationIndex--;
+    ChangeAnim();
+  }
+  function OnNextAnimPush(e:Event){
+    animationIndex++;
+    ChangeAnim();
+  }
+
+  function ChangeAnim(){
+        if(animations &&animationIndex>=0 && animationIndex<=( animations.length-1)) {
+            //Animation Mixerインスタンスを生成
+            mixer.stopAllAction();
+            //全てのAnimation Clipに対して
+                let animation = animations[animationIndex];
+                //Animation Actionを生成
+                let action = mixer.clipAction(animation) ;
+                let outAct=outlineMixer.clipAction(animation);
+     
+                action.loop=THREE.LoopRepeat;
+                outAct.loop=THREE.LoopRepeat;
+                //アニメーションの最後のフレームでアニメーションが終了
+                action.clampWhenFinished = true;
+    
+                //アニメーションを再生
+                action.play();
+                outAct.play();
+        }
+  }
+  
+function canvasDownload(){
+  renderer.render(subScene.Scene,dotCamera.Camera);
+  var link = document.createElement("a");
+  link.href = canvas.toDataURL("image/png");
+  link.download = "canvas.png";
+  link.click();
+}
+  function ModelLoad(path:string){
+
+    scene.RemoveDrawObject("model"); 
+    scene.RemoveDrawObject("outlineModel"); 
+    const　gltfLoader = new GLTFLoader();
+    gltfLoader.load(path,function(data){
+      const gltf = data;
+      var model = gltf.scene.clone() ;
+  
+      model.traverse((object) => { //モデルの構成要素をforEach的に走査
+        if(object instanceof THREE.Mesh) { //その構成要素がメッシュだったら
+      object .material=outlineMaterial;
+  }
+    })
+  
+    animations = gltf.animations;
+    
+      
+    scene.AddDrawObject(gltf.scene,"model"); 
+    scene.AddDrawObject(model,"outlineModel"); 
+    model1=(gltf.scene);
+    outlineModel=(model);
+  
+    gltf.scene.add(model);
+  
+    mixer = new THREE.AnimationMixer(model1);
+    outlineMixer=new THREE.AnimationMixer(outlineModel);
+    ChangeAnim();
+    });
+  }
 }
