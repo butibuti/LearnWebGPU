@@ -1,85 +1,16 @@
 import THREE = require("three");
-import IObject =require("../IObject")
+import ButiLib =require("../ButiLib")
 window.addEventListener("DOMContentLoaded", init);
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { isCallChain } from "typescript";
-class SceneWrapper{
-  private scene:THREE.Scene;
-  private map_DrawObj=new Map<String,THREE.Object3D>();
-  constructor(){
-    this.scene=new THREE.Scene();
-  }
-  /**
-   * AddDrawObject
- arg_obj: THREE.Object3D   */
-  public AddDrawObject( arg_obj: THREE.Object3D,arg_objName:string):string {
-    if(this.map_DrawObj.has(arg_objName)){
-      var output:string=arg_objName;
-      var hasCount=1;
-      while(this.map_DrawObj.has(output+"_"+hasCount)){
 
-        hasCount++;
-      }
-      this.map_DrawObj.set(output+"_"+hasCount,arg_obj);
-      this.scene.add(arg_obj);
-      return output+"_"+hasCount;
-    }
-    this.map_DrawObj.set(arg_objName,arg_obj);
-    this.scene.add(arg_obj);
-    return arg_objName;
-  }
-  /**
-   * RemoveDrawObject
-arg_objName:string   */
-  public RemoveDrawObject(arg_objName:string) {  
-    if(!this.map_DrawObj.has(arg_objName)){
-      return;
-    }
-    var removeObj=this.map_DrawObj.get(arg_objName) as THREE.Object3D;
-    this.map_DrawObj.delete(arg_objName);
 
-    this.scene.remove(removeObj);
-  }
-  /**
-   * GetDrawObject
-   */
-  public GetDrawObject(arg_objName:string) :THREE.Object3D{
-    
-    return this.map_DrawObj.get(arg_objName) as THREE.Object3D;
-  }
-
-  get Scene():THREE.Scene{
-    return this.scene;
-  }
-  
-}
-
-class CameraWrapper{
-  private camera:THREE.Camera;
-  constructor(arg_fov:number,arg_width:number,arg_height:number,arg_near:number,arg_far:number, arg_isPerse:boolean){
-    if(arg_isPerse){
-
-      this.camera = new THREE.PerspectiveCamera(
-        arg_fov,
-        arg_width / arg_height,
-        arg_near,
-        arg_far
-      );
-    }else{
-      this.camera=new  THREE.OrthographicCamera(-arg_width/2,arg_width/2,-arg_height/2,arg_height/2,arg_near,arg_height);
-    }
-  }
-  get Camera():THREE.Camera{
-    return this.camera;
-  }
-}
-
-class EditorCameraMan extends IObject.IObject{
+class EditorCameraMan extends ButiLib.IObject{
   isClick_L:boolean=false;
   isClick_R:boolean=false;
-  camera:CameraWrapper ;
-  constructor(arg_camera:CameraWrapper){
+  camera:ButiLib. CameraWrapper ;
+  constructor(arg_camera:ButiLib.CameraWrapper){
     super();
     this.camera=arg_camera;
   }
@@ -117,14 +48,7 @@ class EditorCameraMan extends IObject.IObject{
   }
 }
 
-class RendererWrapper{
-  
-  private renderer:THREE.Renderer;
-  
-  constructor(arg_renderer:THREE.Renderer){
-    this.renderer=arg_renderer;
-  }
-}
+
 
 const outlineVertexShader =  [
   "uniform float offset;",
@@ -168,7 +92,7 @@ void main() {
 }
 `
 
-class OutlineUniform extends IObject.IObject{
+class OutlineUniform extends ButiLib.IObject{
   range:HTMLInputElement;
   color:HTMLInputElement;
 
@@ -200,8 +124,8 @@ class OutlineUniform extends IObject.IObject{
     }
     this.range=document.getElementById("outlineOffset")as HTMLInputElement;
     this.color=document.getElementById("outlineColor") as HTMLInputElement;
-    IObject.EventManager.RegistMouseMoveEvent(this,"range",this.range);
-    IObject.EventManager.RegistInputChangeEvent(this,"color",this.color);
+    ButiLib.EventManager.RegistMouseMoveEvent(this,"range",this.range);
+    ButiLib.EventManager.RegistInputChangeEvent(this,"color",this.color);
     this.range.value=(this.value.offset.value*1000).toString();
   }
 }
@@ -215,16 +139,12 @@ function init() {
   canvas.oncontextmenu = function () {return false;};
   canvas.addEventListener('mousewheel', function(event) {event.preventDefault()}, { passive: false });
   
-  const renderer = new THREE.WebGLRenderer({canvas:canvas,alpha:true  });
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(width, height);
-  renderer.setClearColor(0x0000ff,0.0);
-  renderer.outputEncoding = THREE.GammaEncoding;
+  const renderer = new ButiLib.RendererWrapper(canvas,width,height);
 
 
   // シーンを作成
-  const scene = new SceneWrapper();
-  const subScene = new SceneWrapper();
+  const scene = new ButiLib. SceneWrapper();
+  const subScene = new ButiLib.SceneWrapper();
 
 var renderTarget = new THREE.WebGLRenderTarget(width/8, height/8,{
 
@@ -249,8 +169,8 @@ var planeMat =  new THREE.ShaderMaterial({
   subScene.AddDrawObject(plane,"dotPlane");
 
   // カメラを作成
-  const camera = new CameraWrapper(45,width, height,0.01,10000,true );
-  const dotCamera = new CameraWrapper(45,width, height,0.01,10000,false );
+  const camera = new ButiLib.CameraWrapper(45,width, height,0.01,10000,true );
+  const dotCamera = new ButiLib.CameraWrapper(45,width, height,0.01,10000,false );
   camera.Camera.position.set(0, 1, 2);
   dotCamera.Camera.position.set(0,0,2);
 
@@ -286,17 +206,17 @@ var outlineModel:THREE.Object3D;
 
   var cameraController=new EditorCameraMan(camera);
 
-  IObject.EventManager.RegistMousePushEvent(cameraController,"cameraController",canvas);
-  IObject.EventManager.RegistMouseReleaseEvent(cameraController,"cameraController",canvas);
-  IObject.EventManager.RegistMouseMoveEvent(cameraController,"cameraController",canvas);
-  IObject.EventManager.RegistWheelEvent(cameraController,"cameraController",canvas);
+  ButiLib.EventManager.RegistMousePushEvent(cameraController,"cameraController",canvas);
+  ButiLib.EventManager.RegistMouseReleaseEvent(cameraController,"cameraController",canvas);
+  ButiLib.EventManager.RegistMouseMoveEvent(cameraController,"cameraController",canvas);
+  ButiLib.EventManager.RegistWheelEvent(cameraController,"cameraController",canvas);
   
   let clock = new THREE.Clock();
 
   
   const downloadButton=document.getElementById("dwonloadButton") as HTMLInputElement;
   
-  downloadButton.addEventListener("click",canvasDownload,true);
+  downloadButton.addEventListener("click",()=>{renderer.CanvasDownload("dotImage.png", subScene,dotCamera);},true);
 
   // 初回実行
   tick();
@@ -308,22 +228,12 @@ var outlineModel:THREE.Object3D;
       outlineMixer.update(clock.getDelta());
     }
     // レンダリング
-    renderer.setRenderTarget(renderTarget);
-    renderer.render(scene.Scene, camera.Camera);
-    renderer.setRenderTarget(null);
-    renderer.render(subScene.Scene,dotCamera.Camera);
+    renderer.Renderer.setRenderTarget(renderTarget);
+    renderer.Renderer.render(scene.Scene, camera.Camera);
+    renderer.Renderer.setRenderTarget(null);
+    renderer.Renderer.render(subScene.Scene,dotCamera.Camera);
   }
 
-
-  function OnBefAnimPush(e:Event){
-    
-    animationIndex--;
-    ChangeAnim();
-  }
-  function OnNextAnimPush(e:Event){
-    animationIndex++;
-    ChangeAnim();
-  }
 
   function ChangeAnim(){
         if(animations &&animationIndex>=0 && animationIndex<=( animations.length-1)) {
@@ -345,14 +255,6 @@ var outlineModel:THREE.Object3D;
                 outAct.play();
         }
   }
-  
-function canvasDownload(){
-  renderer.render(subScene.Scene,dotCamera.Camera);
-  var link = document.createElement("a");
-  link.href = canvas.toDataURL("image/png");
-  link.download = "canvas.png";
-  link.click();
-}
   function ModelLoad(path:string){
 
     scene.RemoveDrawObject("model"); 

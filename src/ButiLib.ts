@@ -1,4 +1,4 @@
-
+import THREE = require("three");
 export class IObject{
     constructor(){}
 
@@ -53,6 +53,101 @@ export class IObject{
 
     }
 }
+export class RendererWrapper extends IObject{
+  
+    private renderer:THREE.WebGLRenderer;
+    canvas :HTMLCanvasElement;
+    constructor(arg_canvas :HTMLCanvasElement,width:number,height:number ){
+      super();
+      this.canvas=arg_canvas;
+      this.renderer=new THREE.WebGLRenderer({canvas:this.canvas,alpha:true  });
+  
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+      this.renderer.setSize(width, height);
+      this.renderer.setClearColor(0x0000ff,0.0);
+      this.renderer.outputEncoding = THREE.GammaEncoding;
+    }
+    get Renderer():THREE.WebGLRenderer{
+      return this.renderer;
+    }
+    CanvasDownload(arg_filename:string, arg_scene: SceneWrapper,arg_camera: CameraWrapper):void{
+      this.Renderer.render(arg_scene.Scene,arg_camera.Camera);
+      var link = document.createElement("a");
+      link.href =this. canvas.toDataURL("image/png");
+      link.download = arg_filename;
+      link.click();
+    }
+  }
+export class SceneWrapper{
+    private scene:THREE.Scene;
+    private map_DrawObj=new Map<String,THREE.Object3D>();
+    constructor(){
+      this.scene=new THREE.Scene();
+    }
+    /**
+     * AddDrawObject
+   arg_obj: THREE.Object3D   */
+    public AddDrawObject( arg_obj: THREE.Object3D,arg_objName:string):string {
+      if(this.map_DrawObj.has(arg_objName)){
+        var output:string=arg_objName;
+        var hasCount=1;
+        while(this.map_DrawObj.has(output+"_"+hasCount)){
+  
+          hasCount++;
+        }
+        this.map_DrawObj.set(output+"_"+hasCount,arg_obj);
+        this.scene.add(arg_obj);
+        return output+"_"+hasCount;
+      }
+      this.map_DrawObj.set(arg_objName,arg_obj);
+      this.scene.add(arg_obj);
+      return arg_objName;
+    }
+    /**
+     * RemoveDrawObject
+  arg_objName:string   */
+    public RemoveDrawObject(arg_objName:string) {  
+      if(!this.map_DrawObj.has(arg_objName)){
+        return;
+      }
+      var removeObj=this.map_DrawObj.get(arg_objName) as THREE.Object3D;
+      this.map_DrawObj.delete(arg_objName);
+  
+      this.scene.remove(removeObj);
+    }
+    /**
+     * GetDrawObject
+     */
+    public GetDrawObject(arg_objName:string) :THREE.Object3D{
+      
+      return this.map_DrawObj.get(arg_objName) as THREE.Object3D;
+    }
+  
+    get Scene():THREE.Scene{
+      return this.scene;
+    }
+    
+  }
+  
+export  class CameraWrapper{
+    private camera:THREE.Camera;
+    constructor(arg_fov:number,arg_width:number,arg_height:number,arg_near:number,arg_far:number, arg_isPerse:boolean){
+      if(arg_isPerse){
+  
+        this.camera = new THREE.PerspectiveCamera(
+          arg_fov,
+          arg_width / arg_height,
+          arg_near,
+          arg_far
+        );
+      }else{
+        this.camera=new  THREE.OrthographicCamera(-arg_width/2,arg_width/2,-arg_height/2,arg_height/2,arg_near,arg_height);
+      }
+    }
+    get Camera():THREE.Camera{
+      return this.camera;
+    }
+  }
 
 export class  EventManager{
     private static map_mouseClickEvent=new Map<String,{handleEvent: (event: MouseEvent) => void;}>();
