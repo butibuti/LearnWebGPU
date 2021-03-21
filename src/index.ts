@@ -4,7 +4,6 @@ import express from 'express'
 const layouts = require("express-ejs-layouts");
 const app: express.Express = express();
 const path = require('path');
-
 const PORT = process.env.PORT || 5000;
 
 app.use(layouts);
@@ -16,7 +15,9 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
 const router: express.Router = express.Router();
+
 router.get('/', (req, res) => res.render('pages/index'));
 router.get('/games/', (req, res) => res.render('pages/game'));
 router.get('/techs/', (req, res) => res.render('pages/techs'));
@@ -24,6 +25,48 @@ router.get('/games/game_find', (req, res) => res.render('pages/game_find'));
 router.get('/games/game_magurossy', (req, res) => res.render('pages/game_magurossy'));
 router.get('/games/game_jetSaber', (req, res) => res.render('pages/game_jetSaber'));
 router.get('/techs/tech_3DtoDot', (req, res) => res.render('pages/tech_3DtoDot'));
-app.use(router);
+router.get('/techs/shaders/:shaderName', (req, res) => {
+    var shaderPath='pages/shaders/'+req.params.shaderName;
+    try{ res.render(shaderPath);}
+    catch(err){
+        res.status(500);
 
+    }
+});
+
+app.use(router);
+app.use(function (req, res, next) {
+    // 出力するデータ
+    var data = {
+        method: req.method,
+        protocol: req.protocol,
+        version: req.httpVersion,
+        url: req.url
+    };
+ 
+    console.log(req.url);
+    // エラーを返却
+    res.status(404);
+    if (req.xhr) {
+        res.json(data);
+    } else {
+        res.render('pages/index')
+    }
+});
+app.use(function (err:Error, req:any, res:any, next:Function) {
+    // 出力するデータ
+    var data = {
+        method: req.method,
+        protocol: req.protocol,
+        version: req.httpVersion,
+        url: req.url,
+    };
+ console.log("5000000000000");
+    res.status(500);
+    if (req.xhr) {
+        res.json(data);
+    } else {
+        res.render('pages/index')
+    }
+});
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));

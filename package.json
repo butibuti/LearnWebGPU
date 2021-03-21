@@ -13,6 +13,7 @@
     "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "debug-3DtoDot": "webpack --config webpack.3DToDot.dev.config",
+    "debug-shaderTest": "webpack --config webpack.shaderTest.dev.config",
     "release-3DtoDot": "webpack --config webpack.3DToDot.pro.config"
   },
   "repository": {
@@ -28,8 +29,10 @@
   "dependencies": {
     "ejs": "^3.1.5",
     "emotion": "^11.0.0",
+    "errorhandler": "^1.5.1",
     "express": "^4.17.1",
     "express-ejs-layouts": "^2.5.0",
+    "fs": "0.0.1-security",
     "node-sass": "^5.0.0",
     "three": "^0.125.2",
     "typescript": "^4.1.3"
