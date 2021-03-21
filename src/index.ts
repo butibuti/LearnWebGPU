@@ -50,7 +50,7 @@ app.use(function (req, res, next) {
     if (req.xhr) {
         res.json(data);
     } else {
-        res.render('pages/index')
+        res.render('pages/errors/404')
     }
 });
 app.use(function (err:Error, req:any, res:any, next:Function) {
@@ -61,12 +61,11 @@ app.use(function (err:Error, req:any, res:any, next:Function) {
         version: req.httpVersion,
         url: req.url,
     };
- console.log("5000000000000");
     res.status(500);
     if (req.xhr) {
         res.json(data);
     } else {
-        res.render('pages/index')
+        res.render('pages/errors/500')
     }
 });
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
