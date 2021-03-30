@@ -1,19 +1,9 @@
 @charset "UTF-8";
-.theme3 {
-  background-color: #FFD1DF;
-  color: gray; }
-
-.theme2 {
-  background-color: #90E4C1; }
-
-.theme1 {
-  background-color: #1FA774; }
-
 .pad5 {
   padding: 5%; }
 
 .pad50 {
-  padding: 50%; }
+  padding: 5%; }
 
 .movie-wrap {
   position: relative;
@@ -28,6 +18,9 @@
   left: 0;
   width: 100%;
   height: 100%; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif; }
 
 body::after {
   content: '';

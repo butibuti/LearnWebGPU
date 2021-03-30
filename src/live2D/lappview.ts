@@ -100,13 +100,6 @@ export class LAppView {
   public render(): void {
     gl.useProgram(this._programId);
 
-    if (this._back) {
-      this._back.render(this._programId);
-    }
-    if (this._gear) {
-      this._gear.render(this._programId);
-    }
-
     gl.flush();
 
     const live2DManager: LAppLive2DManager = LAppLive2DManager.getInstance();

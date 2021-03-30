@@ -1,8 +1,10 @@
+<%- include( '../templates/headInclude',{absPath:"pages/index"}) %>
 <body class="container-fluid " >
   <main class="text-center">
-<div class="pad5 transition-enabled" data-aos="fade-in" >
+<div class="pad5 transition-enabled" >
 
-  <a href="/games/" class="text-dark"><h1>-Games-</h1></a> 
+  <div data-aos="fade-in">
+  <div class ="mt-5"> <a href="/games/" class="text-dark"><h1>-Games-</h1></a> </div>
   <div class="container pad5 " >
     <div id="carouselExampleIndicators" class="carousel slide col-sm " data-bs-ride="carousel" interval="2000" mx-300>
       <ol class="carousel-indicators">
@@ -31,7 +33,40 @@
       </a>
     </div>
   </div>
-  <a href="https://note.com/buti_programer/m/m2fcf520a63b6" class="text-dark"><h1>-note-</h1></a> 
+  </div>
+  <div data-aos="fade-in">
+  <div class ="mt-5"> <a href="/techs/" class="text-dark"><h1>-Techs-</h1></a> </div>
+  <div class="container pad5 " >
+    <div id="carousel_tech" class="carousel slide col-sm " data-bs-ride="carousel" interval="2000" mx-300>
+      <ol class="carousel-indicators">
+        <li data-bs-target="#carousel_tech" data-bs-slide-to="0" class="active"></li>
+        <li data-bs-target="#carousel_tech" data-bs-slide-to="1"></li>
+        <li data-bs-target="#carousel_tech" data-bs-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <a href="/techs/butiengine/"><img src="../img/engine/ButiEngine.png" width="639"  class="d-block w-100" alt="Dx12で作っているゲームエンジン"></a>
+        </div>
+        <div class="carousel-item">
+          <a href="/techs/live2DWithGLSL/"><img src="../img/live2D_GLSL.png" width="639"  class="d-block w-100" alt="Live2Dにシェーダーを適用"></a>
+        </div>
+        <div class="carousel-item">
+          <a href="/techs/tech_3DtoDot/"><img src="../img/3DtoDot.png"  class="d-block w-100" width="639" alt="3Dモデルをドット絵にする"></a>
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carousel_tech" role="button" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carousel_tech" role="button" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </a>
+    </div>
+  </div>
+  </div>
+  <div data-aos="fade-in">
+  <div class ="mt-5">  <a href="https://note.com/buti_programer/m/m2fcf520a63b6" class="text-dark"><h1>-note-</h1></a> </div>
   <div class="container pad5">
         
     <div id="carousel" class="carousel slide col-sm " data-bs-ride="carousel" interval="2000" mx-300>
@@ -59,6 +94,7 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </a>
+    </div>
     </div>
   </div>
 </main>

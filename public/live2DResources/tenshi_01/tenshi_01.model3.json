@@ -1,0 +1,31 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "tenshi_01.moc3",
+		"Textures": [
+			"tenshi_01.2048/texture_00.png"
+		],
+		"Pose": "tenshi_01.pose3.json",
+		"DisplayInfo": "tenshi_01.cdi3.json",
+		"Motions": {
+			"": [
+				{
+					"File": "motions/kamae.motion3.json"
+				}
+			]
+		}
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": []
+		},
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": []
+		}
+	],
+	"HitAreas": []
+}

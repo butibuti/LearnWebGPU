@@ -11,6 +11,7 @@ import { CubismBlendMode } from '../rendering/cubismrenderer';
 import { csmMap } from '../type/csmmap';
 import { csmVector } from '../type/csmvector';
 import { CSM_ASSERT } from '../utils/cubismdebug';
+import {ExShaderParam, ExUniforms} from "./ExShader"
 
 /**
  * モデル
@@ -454,9 +455,31 @@ export class CubismModel {
    * @param drawableIndex Drawableのインデックス
    * @return drawableのテクスチャインデックスリスト
    */
-  public getDrawableTextureIndices(drawableIndex: number): number {
+   public getDrawableTextureIndices(drawableIndex: number): number {
     const textureIndices: Int32Array = this._model.drawables.textureIndices;
     return textureIndices[drawableIndex];
+  }
+
+  /**
+   * 追加シェーダーの番号の取得
+   * @param drawableIndex Drawableのインデックス
+   * @return 追加シェーダーの番号
+   */
+    public GetExShaderNum(drawableIndex: number): number {
+    return this.exShaderParam.exShaderIndicies[drawableIndex];
+  }
+  /**
+   * 追加シェーダー用Uniformの取得
+   * @param drawableIndex Drawableのインデックス
+   * @return 追加シェーダー用Uniform
+   */
+  public GetExShaderUni(drawableIndex: number): ExUniforms {
+    if(this.exShaderParam.exShaderIndicies[drawableIndex]<0){
+      
+      return null;
+    }
+    
+    return this.exShaderParam.exuniforms.get( drawableIndex);
   }
 
   /**
@@ -763,8 +786,9 @@ export class CubismModel {
    * コンストラクタ
    * @param model モデル
    */
-  public constructor(model: Live2DCubismCore.Model) {
+  public constructor(model: Live2DCubismCore.Model,arg_exShaderParam:ExShaderParam) {
     this._model = model;
+    this.exShaderParam=arg_exShaderParam;
     this._parameterValues = null;
     this._parameterMaximumValues = null;
     this._parameterMinimumValues = null;
@@ -797,6 +821,7 @@ export class CubismModel {
   private _savedParameters: csmVector<number>; // 保存されたパラメータ
 
   private _model: Live2DCubismCore.Model; // モデル
+  private exShaderParam: ExShaderParam;
 
   private _parameterValues: Float32Array; // パラメータの値のリスト
   private _parameterMaximumValues: Float32Array; // パラメータの最大値のリスト

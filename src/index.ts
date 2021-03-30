@@ -25,7 +25,9 @@ router.get('/games/game_find', (req, res) => res.render('pages/game_find'));
 router.get('/games/game_magurossy', (req, res) => res.render('pages/game_magurossy'));
 router.get('/games/game_jetSaber', (req, res) => res.render('pages/game_jetSaber'));
 router.get('/techs/tech_3DtoDot', (req, res) => res.render('pages/tech_3DtoDot'));
-router.get('/techs/live2D', (req, res) => res.render('pages/tech_live2DwithGLSL'));
+router.get('/techs/live2DWithGLSL', (req, res) => res.render('pages/tech_live2DwithGLSL'));
+router.get('/techs/butiengine', (req, res) => res.render('pages/tech_dx12Engine'));
+
 router.get('/techs/shaders/:shaderName', (req, res) => {
     var shaderPath='pages/shaders/'+req.params.shaderName;
     try{ res.render(shaderPath);}

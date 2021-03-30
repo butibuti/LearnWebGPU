@@ -30,7 +30,7 @@ export const ViewLogicalMaxBottom = -2.0;
 export const ViewLogicalMaxTop = 2.0;
 
 // 相対パス
-export const ResourcesPath = '../live2DResources/';
+export const ResourcesPath = '../../live2DResources/';
 
 // モデルの後ろにある背景の画像ファイル
 export const BackImageName = '../img/Find.png';

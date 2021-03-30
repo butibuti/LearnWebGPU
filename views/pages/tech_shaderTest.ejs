@@ -1,5 +1,7 @@
 
+<%- include( '../templates/headInclude',{absPath:"pages/techs/shaderTest"}) %>
 <!-- fragment shader --><script id="fs" type="x-shader/x-fragment">
+  
   precision mediump float;
   uniform float time;
   uniform vec2  mouse;
@@ -31,7 +33,7 @@ void main(void){
   gl_FragColor = vec4(rgb, 1.0);
   
 }
-  </script><!-- /fragment shader -->
+</script><!-- /fragment shader -->
 <!-- vertex shader --><script id="vs" type="x-shader/x-vertex">
   attribute vec3 position;
 

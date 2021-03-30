@@ -1,0 +1,12 @@
+<%
+ pathSet = function(absPath){
+    var rootPath = absPath.split('pages/')[1];
+    if(rootPath.split('/').length - 2 > 0){
+        return '../'.repeat(rootPath.split('/').length - 2);
+    }else{
+        return '';
+    }
+ };
+%>
+
+    <link  href="<%= pathSet(absPath) %>/../css/style.css" rel=" stylesheet">

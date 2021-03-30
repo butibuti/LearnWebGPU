@@ -24,7 +24,7 @@ import { CubismLogError, CubismLogInfo } from '../utils/cubismdebug';
 import { CubismMoc } from './cubismmoc';
 import { CubismModel } from './cubismmodel';
 import { CubismModelUserData } from './cubismmodeluserdata';
-
+import {ExShaderInfo} from "./ExShader"
 /**
  * ユーザーが実際に使用するモデル
  *
@@ -127,9 +127,9 @@ export class CubismUserModel {
    *
    * @param buffer    moc3ファイルが読み込まれているバッファ
    */
-  public loadModel(buffer: ArrayBuffer) {
+  public loadModel(buffer: ArrayBuffer,arg_exShaderInfo: ExShaderInfo[]) {
     this._moc = CubismMoc.create(buffer);
-    this._model = this._moc.createModel();
+    this._model = this._moc.createModel(arg_exShaderInfo );
     this._model.saveParameters();
 
     if (this._moc == null || this._model == null) {

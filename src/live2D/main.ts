@@ -8,21 +8,46 @@
 import { LAppDelegate } from './lappdelegate';
 import{ LAppLive2DManager} from "./lapplive2dmanager"
 import * as LAppDefine from './lappdefine';
+import {ExUniforms,ExShaderInfo,ExShaderLoadInfo, ShaderType} from "./Framework/src/model/ExShader"
 
 /**
  * ブラウザロード後の処理
  */
 window.onload = (): void => {
-  // create the application instance
-  var modelName=(document.getElementById("modelName") as HTMLScriptElement).text;
-  LAppDelegate.CreateInstance([modelName]);
 
+  
+  LAppDelegate.CreateInstance();
 
-  if (LAppDelegate.getInstance().initialize() == false) {
+  var load=new ExShaderLoadInfo((document.getElementById("fs_block") as HTMLScriptElement).text);
+  var load2=new ExShaderLoadInfo((document.getElementById("fs_rainbow") as HTMLScriptElement).text);
+
+  if (LAppDelegate.getInstance().initialize([load,load2]) == false) {
     return;
   }
 
-  LAppDelegate.getInstance().run();
+  var modelName=(document.getElementById("modelName") as HTMLScriptElement).text;
+  
+  var exInfo=new ExShaderInfo("ArtMesh80",0);
+  var exInfo2=new ExShaderInfo("ArtMesh81",0);
+  var aurora=new ExShaderInfo("ArtMesh79",1);
+  var aurora2=new ExShaderInfo("ArtMesh85",1);
+  //exInfo.exUniform.time=0;
+  exInfo.exUniform.resolution_x=1024;exInfo2.exUniform.resolution_x=1024;
+  exInfo.exUniform.resolution_y=1024;exInfo2.exUniform.resolution_y=1024;
+  aurora.exUniform.resolution_y=1024;aurora.exUniform.resolution_y=1024;
+  aurora2.exUniform.resolution_y=1024;aurora2.exUniform.resolution_y=1024;
+  
+  LAppDelegate.getInstance().LoadModel([modelName],[exInfo,exInfo2]);
+
+  function Render(){
+    exInfo.exUniform.time+=0.001;
+    exInfo2.exUniform.time+=0.001;
+    aurora.exUniform.time+=0.1;
+    aurora2.exUniform.time+=0.1;
+    LAppDelegate.getInstance().run();
+    requestAnimationFrame(Render);
+  }
+Render();
 };
 
 /**

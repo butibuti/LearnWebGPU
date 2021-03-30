@@ -1,0 +1,215 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "ParamAngleZ",
+			"GroupId": "",
+			"Name": "角度 Z"
+		},
+		{
+			"Id": "Param6",
+			"GroupId": "",
+			"Name": "スカート揺れ"
+		},
+		{
+			"Id": "ParamEyeLOpen",
+			"GroupId": "",
+			"Name": "左目　開閉"
+		},
+		{
+			"Id": "ParamEyeROpen",
+			"GroupId": "",
+			"Name": "右目　開閉"
+		},
+		{
+			"Id": "ParamEyeBallX",
+			"GroupId": "",
+			"Name": "目玉 X"
+		},
+		{
+			"Id": "ParamBrowLForm",
+			"GroupId": "",
+			"Name": "左眉　変形"
+		},
+		{
+			"Id": "ParamBrowRForm",
+			"GroupId": "",
+			"Name": "右眉　変形"
+		},
+		{
+			"Id": "ParamMouthForm",
+			"GroupId": "",
+			"Name": "口　変形"
+		},
+		{
+			"Id": "ParamBodyAngleZ",
+			"GroupId": "",
+			"Name": "体の回転　Z"
+		},
+		{
+			"Id": "Param",
+			"GroupId": "",
+			"Name": "右肩"
+		},
+		{
+			"Id": "Param2",
+			"GroupId": "",
+			"Name": "右ひじ"
+		},
+		{
+			"Id": "Param3",
+			"GroupId": "",
+			"Name": "左肩"
+		},
+		{
+			"Id": "Param4",
+			"GroupId": "",
+			"Name": "左ひじ"
+		},
+		{
+			"Id": "ParamHairFront",
+			"GroupId": "",
+			"Name": "髪揺れ　前"
+		},
+		{
+			"Id": "ParamHairSide",
+			"GroupId": "",
+			"Name": "髪揺れ　横"
+		},
+		{
+			"Id": "ParamHairBack",
+			"GroupId": "",
+			"Name": "髪揺れ　後"
+		},
+		{
+			"Id": "ParamBreath",
+			"GroupId": "",
+			"Name": "呼吸"
+		},
+		{
+			"Id": "Param7",
+			"GroupId": "",
+			"Name": "極光揺れ"
+		},
+		{
+			"Id": "Param5",
+			"GroupId": "",
+			"Name": "剣揺れ"
+		}
+	],
+	"ParameterGroups": [],
+	"Parts": [
+		{
+			"Id": "Part",
+			"Name": "帽子"
+		},
+		{
+			"Id": "Part2",
+			"Name": "前髪"
+		},
+		{
+			"Id": "Part3",
+			"Name": "右の髪"
+		},
+		{
+			"Id": "Part4",
+			"Name": "顔"
+		},
+		{
+			"Id": "Part9",
+			"Name": "髪"
+		},
+		{
+			"Id": "Part10",
+			"Name": "襟"
+		},
+		{
+			"Id": "Part11",
+			"Name": "刀身"
+		},
+		{
+			"Id": "Part12",
+			"Name": "持ちて"
+		},
+		{
+			"Id": "Part13",
+			"Name": "右袖"
+		},
+		{
+			"Id": "Part14",
+			"Name": "右手"
+		},
+		{
+			"Id": "Part15",
+			"Name": "右ひじから上"
+		},
+		{
+			"Id": "Part16",
+			"Name": "右ひじから下"
+		},
+		{
+			"Id": "Part17",
+			"Name": "左の髪"
+		},
+		{
+			"Id": "Part18",
+			"Name": "シャツ"
+		},
+		{
+			"Id": "Part19",
+			"Name": "首"
+		},
+		{
+			"Id": "Part20",
+			"Name": "左袖"
+		},
+		{
+			"Id": "Part21",
+			"Name": "左ひじから下"
+		},
+		{
+			"Id": "Part22",
+			"Name": "虹色の奴"
+		},
+		{
+			"Id": "Part23",
+			"Name": "スカート"
+		},
+		{
+			"Id": "Part24",
+			"Name": "シャツ後ろ"
+		},
+		{
+			"Id": "Part25",
+			"Name": "虹色の奴後ろ"
+		},
+		{
+			"Id": "Part26",
+			"Name": "右靴"
+		},
+		{
+			"Id": "Part27",
+			"Name": "左靴"
+		},
+		{
+			"Id": "Part28",
+			"Name": "髪"
+		},
+		{
+			"Id": "Part5",
+			"Name": "右眼"
+		},
+		{
+			"Id": "Part7",
+			"Name": "左眼"
+		},
+		{
+			"Id": "Part6",
+			"Name": "瞳孔 のコピー"
+		},
+		{
+			"Id": "Part8",
+			"Name": "瞳孔"
+		}
+	]
+}

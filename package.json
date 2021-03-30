@@ -14,6 +14,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "debug-3DtoDot": "webpack --config webpack.3DToDot.dev.config",
     "debug-live2D": "webpack --config webpack.live2D.dev.config",
+    "release-live2D": "webpack --config webpack.live2D.pro.config",
     "debug-shaderTest": "webpack --config webpack.shaderTest.dev.config",
     "release-3DtoDot": "webpack --config webpack.3DToDot.pro.config"
   },

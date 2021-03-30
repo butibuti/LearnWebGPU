@@ -13,6 +13,7 @@ import * as LAppDefine from './lappdefine';
 import { canvas } from './lappdelegate';
 import { LAppModel } from './lappmodel';
 import { LAppPal } from './lapppal';
+import {ExShaderInfo,ExUniforms} from "./Framework/src/model/ExShader"
 
 export let s_instance: LAppLive2DManager = null;
 
@@ -23,11 +24,12 @@ export let s_instance: LAppLive2DManager = null;
 export class LAppLive2DManager {
 
   modelNames:string[];
+  exShaderInfos:ExShaderInfo[];
 
 
-  public static CreateInstance(arg_modelNames:string[]){
+  public static CreateInstance(arg_modelNames:string[],arg_exShaderInfos:ExShaderInfo[]){
     if (s_instance == null) {
-      s_instance = new LAppLive2DManager( arg_modelNames);
+      s_instance = new LAppLive2DManager( arg_modelNames,arg_exShaderInfos);
     }
   }
 
@@ -39,7 +41,7 @@ export class LAppLive2DManager {
    */
   public static getInstance(): LAppLive2DManager {
     if (s_instance == null) {
-      s_instance = new LAppLive2DManager( ['Haru']);
+      s_instance = new LAppLive2DManager( ['Haru'],[]);
     }
 
     return s_instance;
@@ -105,26 +107,21 @@ export class LAppLive2DManager {
    * @param y 画面のY座標
    */
   public onTap(x: number, y: number): void {
-    if (LAppDefine.DebugLogEnable) {
-      LAppPal.printMessage(
-        `[APP]tap point: {x: ${x.toFixed(2)} y: ${y.toFixed(2)}}`
-      );
-    }
+    
+    for (let i = 0; i < this._models.getSize(); i++) {
+      const model: LAppModel = this.getModel(i);
 
+      if (model) {
+        ( model.startMotion("",0,100));
+      }
+    }
+    
     for (let i = 0; i < this._models.getSize(); i++) {
       if (this._models.at(i).hitTest(LAppDefine.HitAreaNameHead, x, y)) {
-        if (LAppDefine.DebugLogEnable) {
-          LAppPal.printMessage(
-            `[APP]hit area: [${LAppDefine.HitAreaNameHead}]`
-          );
-        }
+        
         this._models.at(i).setRandomExpression();
       } else if (this._models.at(i).hitTest(LAppDefine.HitAreaNameBody, x, y)) {
-        if (LAppDefine.DebugLogEnable) {
-          LAppPal.printMessage(
-            `[APP]hit area: [${LAppDefine.HitAreaNameBody}]`
-          );
-        }
+        
         this._models
           .at(i)
           .startRandomMotion(
@@ -196,9 +193,11 @@ export class LAppLive2DManager {
     let modelJsonName: string = this.modelNames[index];
     modelJsonName += '.model3.json';
 
+    
+
     this.releaseAllModel();
     this._models.pushBack(new LAppModel());
-    this._models.at(0).loadAssets(modelPath, modelJsonName);
+    this._models.at(0).loadAssets(modelPath, modelJsonName,this.exShaderInfos);
   }
 
   public setViewMatrix(m: CubismMatrix44.CubismMatrix44) {
@@ -210,12 +209,12 @@ export class LAppLive2DManager {
   /**
    * コンストラクタ
    */
-  constructor(arg_modelNames:string[]) {
+  constructor(arg_modelNames:string[],arg_exShaderInfos:ExShaderInfo[]) {
     this._viewMatrix = new CubismMatrix44.CubismMatrix44();
+    this.exShaderInfos=arg_exShaderInfos;
     this._models = new csmVector.csmVector<LAppModel>();
     this._sceneIndex = 0;
     this.modelNames=arg_modelNames;
-    console.log(this.modelNames);
     this.changeScene(this._sceneIndex);
   }
 

@@ -32,6 +32,7 @@ import * as LAppDefine from './lappdefine';
 import { canvas, frameBuffer, gl, LAppDelegate } from './lappdelegate';
 import { LAppPal } from './lapppal';
 import { TextureInfo } from './lapptexturemanager';
+import {ExShaderInfo,ShaderType} from "./Framework/src/model/ExShader"
 
 enum LoadStep {
   LoadAssets,
@@ -69,7 +70,7 @@ export class LAppModel extends CubismUserModel.CubismUserModel {
    * @param dir
    * @param fileName
    */
-  public loadAssets(dir: string, fileName: string): void {
+  public loadAssets(dir: string, fileName: string,arg_exShaderInfo:ExShaderInfo[]): void {
     this._modelHomeDir = dir;
 
     fetch(`${this._modelHomeDir}/${fileName}`)
@@ -84,7 +85,7 @@ export class LAppModel extends CubismUserModel.CubismUserModel {
         this._state = LoadStep.LoadModel;
 
         // 結果を保存
-        this.setupModel(setting);
+        this.setupModel(setting,arg_exShaderInfo);
       });
   }
 
@@ -94,7 +95,7 @@ export class LAppModel extends CubismUserModel.CubismUserModel {
    *
    * @param setting ICubismModelSettingのインスタンス
    */
-  private setupModel(setting: ICubismModelSetting.ICubismModelSetting): void {
+  private setupModel(setting: ICubismModelSetting.ICubismModelSetting,arg_exShaderInfo:ExShaderInfo[]): void {
     this._updating = true;
     this._initialized = false;
 
@@ -104,10 +105,11 @@ export class LAppModel extends CubismUserModel.CubismUserModel {
     if (this._modelSetting.getModelFileName() != '') {
       const modelFileName = this._modelSetting.getModelFileName();
 
+      
       fetch(`${this._modelHomeDir}/${modelFileName}`)
         .then(response => response.arrayBuffer())
         .then(arrayBuffer => {
-          this.loadModel(arrayBuffer);
+          this.loadModel(arrayBuffer,arg_exShaderInfo);
           this._state = LoadStep.LoadExpression;
 
           // callback
@@ -360,6 +362,7 @@ export class LAppModel extends CubismUserModel.CubismUserModel {
 
         this.createRenderer();
         this.setupTextures();
+        
         this.getRenderer().startUp(gl);
       }
     };
@@ -538,9 +541,7 @@ export class LAppModel extends CubismUserModel.CubismUserModel {
       }
       return CubismMotionQueueEntryHandle. InvalidMotionQueueEntryHandleValue;
     }
-
     const motionFileName = this._modelSetting.getMotionFileName(group, no);
-
     // ex) idle_0
     const name = `${group}_${no}`;
     let motion: CubismMotion.CubismMotion = this._motions.getValue(name) as CubismMotion.CubismMotion;
@@ -550,6 +551,7 @@ export class LAppModel extends CubismUserModel.CubismUserModel {
       fetch(`${this._modelHomeDir}/${motionFileName}`)
         .then(response => response.arrayBuffer())
         .then(arrayBuffer => {
+          
           motion = this.loadMotion(
             arrayBuffer,
             arrayBuffer.byteLength,
@@ -569,7 +571,7 @@ export class LAppModel extends CubismUserModel.CubismUserModel {
           if (fadeTime >= 0.0) {
             motion.setFadeOutTime(fadeTime);
           }
-
+          
           motion.setEffectIds(this._eyeBlinkIds, this._lipSyncIds);
           autoDelete = true; // 終了時にメモリから削除
         });
@@ -577,9 +579,6 @@ export class LAppModel extends CubismUserModel.CubismUserModel {
       motion.setFinishedMotionHandler(onFinishedMotionHandler);
     }
 
-    if (this._debugMode) {
-      LAppPal.printMessage(`[APP]start motion: [${group}_${no}`);
-    }
     return this._motionManager.startMotionPriority(
       motion,
       autoDelete,
@@ -697,6 +696,7 @@ export class LAppModel extends CubismUserModel.CubismUserModel {
     for (let i = 0; i < this._modelSetting.getMotionCount(group); i++) {
       const motionFileName = this._modelSetting.getMotionFileName(group, i);
 
+
       // ex) idle_0
       const name = `${group}_${i}`;
       if (this._debugMode) {
@@ -743,6 +743,7 @@ export class LAppModel extends CubismUserModel.CubismUserModel {
 
             this.createRenderer();
             this.setupTextures();
+            
             this.getRenderer().startUp(gl);
           }
         });

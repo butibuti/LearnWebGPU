@@ -13,23 +13,22 @@ import { LAppPal } from './lapppal';
 import { LAppTextureManager } from './lapptexturemanager';
 import { LAppView } from './lappview';
 
+import {ExShaderInfo,ExShaderLoadInfo,ShaderType} from "./Framework/src/model/ExShader"
+import {CubismShader_WebGL} from "./Framework/src/rendering/cubismrenderer_webgl"
 export let canvas: HTMLCanvasElement = null;
 export let s_instance: LAppDelegate = null;
 export let gl: WebGLRenderingContext = null;
 export let frameBuffer: WebGLFramebuffer = null;
-
 /**
  * アプリケーションクラス。
  * Cubism SDKの管理を行う。
  */
 export class LAppDelegate {
 
-  modelNames:string[];
 
-
-  public static CreateInstance(arg_modelNames:string[] ){
+  public static CreateInstance( ){
     if (s_instance == null) {
-      s_instance = new LAppDelegate(arg_modelNames);
+      s_instance = new LAppDelegate();
     }
   }
 
@@ -41,7 +40,7 @@ export class LAppDelegate {
    */
   public static getInstance(): LAppDelegate {
     if (s_instance == null) {
-      s_instance = new LAppDelegate(["Haru"]);
+      s_instance = new LAppDelegate();
     }
 
     return s_instance;
@@ -61,15 +60,15 @@ export class LAppDelegate {
   /**
    * APPに必要な物を初期化する。
    */
-  public initialize(): boolean {
+  public initialize( arg_exShaderload:ExShaderLoadInfo[]): boolean {
     // キャンバスの作成
     canvas = document.getElementById("myCanvas") as HTMLCanvasElement;
-    if (LAppDefine.CanvasSize === 'auto') {
-      this._resizeCanvas();
-    } else {
-      canvas.width = LAppDefine.CanvasSize.width;
-      canvas.height = LAppDefine.CanvasSize.height;
-    }
+    
+    // canvas サイズ
+    const width=1048;
+    const height=1048;
+    canvas.width = width;
+    canvas.height = height;
 
     // glコンテキストを初期化
     // @ts-ignore
@@ -112,6 +111,8 @@ export class LAppDelegate {
       canvas.onmouseup = onClickEnded;
     }
 
+    CubismShader_WebGL.getInstance().setGl(gl);
+    CubismShader_WebGL.getInstance().GenerateExShaders(arg_exShaderload);
     // AppViewの初期化
     this._view.initialize();
 
@@ -125,9 +126,9 @@ export class LAppDelegate {
    * Resize canvas and re-initialize view.
    */
   public onResize(): void {
-    this._resizeCanvas();
-    this._view.initialize();
-    this._view.initializeSprite();
+    //this._resizeCanvas();
+    //this._view.initialize();
+    //this._view.initializeSprite();
   }
 
   /**
@@ -183,7 +184,7 @@ export class LAppDelegate {
       this._view.render();
 
       // ループのために再帰呼び出し
-      requestAnimationFrame(loop);
+      //requestAnimationFrame(loop);
     };
     loop();
   }
@@ -229,7 +230,7 @@ export class LAppDelegate {
       'void main(void)' +
       '{' +
       '    vec4 color=texture2D(texture, vuv);'+
-      '   gl_FragColor =vec4(1,0,0,1);' +
+      '   gl_FragColor =color;' +
       '}';
 
     gl.shaderSource(fragmentShaderId, fragmentShader);
@@ -265,8 +266,7 @@ export class LAppDelegate {
   /**
    * コンストラクタ
    */
-   constructor(arg_modelName: string[]) {
-     
+  constructor() {     
     this._captured = false;
     this._mouseX = 0.0;
     this._mouseY = 0.0;
@@ -275,7 +275,7 @@ export class LAppDelegate {
     this._cubismOption = new CubismFramework.Option();
     this._view = new LAppView();
     this._textureManager = new LAppTextureManager();
-    this.modelNames=arg_modelName;
+
   }
 
   /**
@@ -292,8 +292,15 @@ export class LAppDelegate {
 
     // load model
     
-  LAppLive2DManager.CreateInstance(this.modelNames);
-    //LAppLive2DManager.getInstance();
+  }
+
+  /**
+   * LoadModel
+   * 
+   *  */
+  public LoadModel(arg_modelNames:string[],arg_exShaderInfo:ExShaderInfo[]) {
+    
+    LAppLive2DManager.CreateInstance(arg_modelNames,arg_exShaderInfo);
 
     LAppPal.updateTime();
 
@@ -304,8 +311,6 @@ export class LAppDelegate {
    * Resize the canvas to fill the screen.
    */
   private _resizeCanvas(): void {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
   }
 
   _cubismOption: CubismFramework.Option; // Cubism SDK Option

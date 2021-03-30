@@ -8,6 +8,7 @@
 import { CubismMatrix44 } from '../math/cubismmatrix44';
 import { CubismModel } from '../model/cubismmodel';
 
+import { ExUniforms } from '../model/ExShader';
 /**
  * モデル描画を処理するレンダラ
  *
@@ -210,6 +211,8 @@ export abstract class CubismRenderer {
    * @param opacity 不透明度
    * @param colorBlendMode カラーブレンディングのタイプ
    * @param invertedMask マスク使用時のマスクの反転使用
+   * @param exShaderNum 外部定義のシェーダーの番号(-1で不使用)
+   * @param exshaderUniform 外部定義のUniform
    */
   public abstract drawMesh(
     textureNo: number,
@@ -220,7 +223,9 @@ export abstract class CubismRenderer {
     uvArray: Float32Array,
     opacity: number,
     colorBlendMode: CubismBlendMode,
-    invertedMask: boolean
+    invertedMask: boolean,
+    exShaderNum:number,
+    exshaderUniform:ExUniforms
   ): void;
 
   /**

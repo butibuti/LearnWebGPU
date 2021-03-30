@@ -7,6 +7,8 @@
 
 import { CSM_ASSERT } from '../utils/cubismdebug';
 import { CubismModel } from './cubismmodel';
+import {ExShaderInfo ,ExShaderParam, ExUniforms} from "./ExShader"
+
 
 /**
  * Mocデータの管理
@@ -46,15 +48,32 @@ export class CubismMoc {
    *
    * @return Mocデータから作成されたモデル
    */
-  createModel(): CubismModel {
+  createModel(arg_exShaderInfo: Array<ExShaderInfo> ): CubismModel {
     let cubismModel: CubismModel = null;
 
     const model: Live2DCubismCore.Model = Live2DCubismCore.Model.fromMoc(
       this._moc
     );
+    var shaderParam=new ExShaderParam();
+    const drawableCount=model.drawables.count;
+    shaderParam.exShaderIndicies=new Array(drawableCount);
+    shaderParam.exuniforms=new Map<number,ExUniforms>();
+    for( var i=0;i<drawableCount;i++){
+      shaderParam.exShaderIndicies[i]=-1;
+    }
+    var shaderInfoSize=arg_exShaderInfo.length;
+    for(var i=0;i< model.drawables.ids.length;i++){
+
+      for(var j=0;j<shaderInfoSize;j++){
+        if(arg_exShaderInfo[j].artMeshID==model.drawables.ids[i]){
+          shaderParam.exShaderIndicies[i]=arg_exShaderInfo[j].exShaderIndex;
+          shaderParam.exuniforms.set(i,arg_exShaderInfo[j].exUniform);
+        }
+      }
+    }
 
     if (model) {
-      cubismModel = new CubismModel(model);
+      cubismModel = new CubismModel(model,shaderParam);
       cubismModel.initialize();
 
       ++this._modelCount;
