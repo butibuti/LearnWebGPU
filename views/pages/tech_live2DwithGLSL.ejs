@@ -158,7 +158,6 @@ vec4 mainImage(in vec2 fragCoord){
 	vec4 color=0.05*emission*vec4(0.4,0.4,0.8,1.0);
   return color;
 }
-// --------[ Original ShaderToy ends here ]---------- //
 
 void main()
 {
@@ -166,7 +165,6 @@ void main()
   vec4 tex=texture2D(s_texture0 , v_texCoord);
   tex.rgb*= mainImage( gl_FragCoord.xy).rgb;
   gl_FragColor =tex; 
-   
 }
 
   </script>
