@@ -21,6 +21,7 @@ const router: express.Router = express.Router();
 router.get('/', (req, res) => res.render('pages/index'));
 router.get('/games/', (req, res) => res.render('pages/game'));
 router.get('/techs/', (req, res) => res.render('pages/techs'));
+router.get('/choose/', (req, res) => res.render('pages/choose'));
 router.get('/games/game_find', (req, res) => res.render('pages/game_find'));
 router.get('/games/game_magurossy', (req, res) => res.render('pages/game_magurossy'));
 router.get('/games/game_jetSaber', (req, res) => res.render('pages/game_jetSaber'));
