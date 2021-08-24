@@ -2,8 +2,26 @@ $tnemecolor_1: #1FA774;
 $tnemecolor_2: #90E4C1;
 $tnemecolor_3: #FFD1DF;
 
+.pad1{
+  padding: 1%;
+}
 .pad5{
   padding: 5%;
+}
+.pad10{
+  padding: 10%;
+}
+.px10py3{
+  padding:3em, 5em;
+}
+.pad15{
+  padding: 15%;
+}
+.pad20{
+  padding: 20%;
+}
+.pad25{
+  padding: 25%;
 }
 .pad50{
   padding: 5%;
@@ -13,6 +31,35 @@ $tnemecolor_3: #FFD1DF;
   padding-bottom: 56.25%; /*アスペクト比 16:9の場合の縦幅*/
   height: 0;
   overflow: hidden;
+}
+
+.bg_choose_copy{
+  background-color: rgb(27, 167, 211);
+  font-family: "メイリオ", sans-serif;
+}
+.bg_choose_ground{
+  background-color: rgb(27, 167, 211);
+  background-image: url("../img/Choose/ground_Front.png");
+  background-position: center 100%;
+  background-size:auto 100%;
+  background-repeat: repeat-x;
+}
+.bg_choose_ground_rev{
+  background-color: rgb(27, 167, 211);
+  background-image: url("../img/Choose/ground_Front_rev.png");
+  background-size:auto 100%;
+  background-position: center 0%;
+  background-repeat: repeat-x;
+}
+.bg_choose_basic{
+  background-color: rgb(34, 31, 33);
+  color: #fff;
+  line-height: 2;
+  
+}
+
+.choose_copy{
+  color: #fff;
 }
 
 .movie-wrap iframe {
@@ -34,24 +81,21 @@ body::after {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color:#fff;  /* 背景カラー */
-  z-index: 9999;  /* 一番手前に */
-  pointer-events: none;  /* 他の要素にアクセス可能にするためにポインターイベントは無効に */
-  opacity: 0;  /* 初期値では非表示 */
-  -webkit-transition: opacity .8s ease;  /* アニメーション時間は 0.8秒 */
+  background-color:#fff;  
+  z-index: 9999;  
+  pointer-events: none;  
+  opacity: 0;  
+  -webkit-transition: opacity .8s ease;  
   transition: opacity .8s ease;
 }
  
  
-/*body要素に.fadeoutセレクタがある場合には、レイヤーが表示されるようにopacityを１に設定します。*/
  
 body.fadeout::after {
   opacity: 1;
 }
  
  
-/*お好みで、.fadeoutセレクタ以下の他の要素にもアニメーション用のCSSを定義します*/
-/*DEMOではページ遷移時にarticle要素のスケールもアニメーションさせています*/
  
 body.fadeout article{
   -webkit-transform:scale(1.2);

@@ -15,7 +15,6 @@ import {ExUniforms,ExShaderInfo,ExShaderLoadInfo, ShaderType} from "./Framework/
  */
 window.onload = (): void => {
 
-  
   LAppDelegate.CreateInstance();
 
   var load=new ExShaderLoadInfo((document.getElementById("fs_block") as HTMLScriptElement).text);

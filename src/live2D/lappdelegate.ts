@@ -57,14 +57,12 @@ export class LAppDelegate {
     s_instance = null;
   }
 
-  /**
-   * APPに必要な物を初期化する。
-   */
+  
   public initialize( arg_exShaderload:ExShaderLoadInfo[]): boolean {
-    // キャンバスの作成
+    
     canvas = document.getElementById("myCanvas") as HTMLCanvasElement;
     
-    // canvas サイズ
+    
     const width=1048;
     const height=1048;
     canvas.width = width;
@@ -85,8 +83,6 @@ export class LAppDelegate {
       return false;
     }
 
-    // キャンバスを DOM に追加
-    //document.body.appendChild(canvas);
 
     if (!frameBuffer) {
       frameBuffer = gl.getParameter(gl.FRAMEBUFFER_BINDING);

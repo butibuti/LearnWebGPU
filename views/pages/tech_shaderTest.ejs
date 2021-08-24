@@ -1,5 +1,6 @@
 
 <%- include( '../templates/headInclude',{absPath:"pages/techs/shaderTest"}) %>
+<%- include("../templates/navBar",null) %>
 <!-- fragment shader --><script id="fs" type="x-shader/x-fragment">
   
   precision mediump float;
@@ -64,3 +65,4 @@ void main(void){
       <p>GLSLのテスト</p>
     </div>
   </body>
+  <%- include("../templates/footer",{right:"© 2021 Buti_PG"}) %>
