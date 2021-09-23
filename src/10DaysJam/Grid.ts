@@ -5,7 +5,7 @@ import Effect=require("./Effect")
 import THREE = require("three")
 
 const FireSpreadTable=[new ButiLib.Int2(0,1),new ButiLib.Int2(0,-1),new ButiLib.Int2(-1,0),new ButiLib.Int2(1,0),
-        new ButiLib.Int2(1,1),new ButiLib.Int2(-1,1),new ButiLib.Int2(1,-1),new ButiLib.Int2(-1,-1),new ButiLib.Int2(1,0),new ButiLib.Int2(0,1)]
+        new ButiLib.Int2(1,1),new ButiLib.Int2(-1,1),new ButiLib.Int2(1,-1),new ButiLib.Int2(-1,-1),new ButiLib.Int2(1,0),new ButiLib.Int2(1,0),new ButiLib.Int2(1,0),new ButiLib.Int2(1,0),new ButiLib.Int2(1,0),new ButiLib.Int2(0,1)]
 
 export class Grid extends ButiGameLib.GameObject{
     model:ButiLib.ModelWrapper;
@@ -71,8 +71,9 @@ export class Grid extends ButiGameLib.GameObject{
         ButiLib.EventManager.UnRegistExEvent( "GameUpdate","GridColorAnim:"+this.horizontalIndex+","+this.verticlaIndex);
     }
     SpreadFire():void{
-        if(ButiLib.GetRandomArbitrary(0,1)>0.9){
-            const dir=FireSpreadTable[ButiLib.GetRandomInt(0,10)];
+        if(ButiLib.GetRandomArbitrary(0,1.0)>0.95){
+
+            const dir=FireSpreadTable[ButiLib.GetRandomInt(0,FireSpreadTable.length)];
             this.manager.GetGrid(this.horizontalIndex+dir.x,this.verticlaIndex+dir.y).IsBurning=true;
         }
         ButiLib.EventManager.ExecuteExEvent("FireTurnEnd");
@@ -96,8 +97,8 @@ export class Grid extends ButiGameLib.GameObject{
     set Piece(arg_piece:Peice.Piece){this.peice=arg_piece;}
 
 }
-const buffer=5;
-const size=15;
+const buffer=8;
+const size=25;
 export class GridManager extends ButiGameLib.GameObject{
     private horizontalStartIndex:number=0;
     private horizontalEndIndex:number =size ;
@@ -210,7 +211,7 @@ export class GridManager extends ButiGameLib.GameObject{
             this.BurnBottomEdge();
             isSpawnCall=true;
         }
-        if(isSpawnCall=true){
+        if(isSpawnCall==false){
             ButiLib.EventManager.RegistExEvent({handleEvent:()=>{
                 this.pieceManager.NoSpawn();
                 ButiLib.EventManager.UnRegistExEvent("FireTurnEnd","NoSpawn");

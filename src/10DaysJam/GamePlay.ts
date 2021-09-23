@@ -99,7 +99,7 @@ export class GamePlayScene extends ButiGameLib.GameScene{
       
   ButiLib.EventManager.ExecuteExEvent("HusumaOpenSoundPlay");
         this.gridManager.Generate();
-        this.playersPiece=new Piece.Piece_Player(0,this,this.gridManager,6,5,this.gamePlayCameraControler);
+        this.playersPiece=new Piece.Piece_Player(0,this,this.gridManager,8,5,this.gamePlayCameraControler);
         this.playersPiece.OnSet();
         this.gamePlayCameraControler.CameraPosition=new THREE.Vector3 (-12,20,27);
         this.gamePlayCameraControler.TargetPosition.set(this.playersPiece.currentPosition.x,20,this.playersPiece.currentPosition.z+20);
@@ -142,8 +142,10 @@ export class GamePlayScene extends ButiGameLib.GameScene{
         ButiLib.EventManager.RegistExEvent({handleEvent:()=>{this.transitionShoji_L.Update();this.transitionShoji_R.Update()}}, "GameUpdate","GamePlayShojiUpdate") 
 
         //this.enemyManager.AddEnemy(new Piece.Piece_enemy(this.enemyManager, Piece.PieceType.Kyousha, this.playersPiece , "koma_hisha",0,this,this.gridManager,5,5));
-        this.enemyManager.AddEnemy(new Piece.Piece_enemy(this.enemyManager, Piece.PieceType.Kin, this.playersPiece , "koma_kin",1,this,this.gridManager,8,8));
-        this.enemyManager.AddEnemy(new Piece.Piece_enemy(this.enemyManager, Piece.PieceType.Gin, this.playersPiece , "koma_gin",2,this,this.gridManager,8,7));
+        {
+          this.enemyManager.AddEnemy(new Piece.Piece_enemy(this.enemyManager, Piece.PieceType.Hu, this.playersPiece , "koma_hu",1,this,this.gridManager,8,8));
+          this.enemyManager.AddEnemy(new Piece.Piece_enemy(this.enemyManager, Piece.PieceType.Hu, this.playersPiece , "koma_hu",2,this,this.gridManager,7,8));
+        }
     
         
     }

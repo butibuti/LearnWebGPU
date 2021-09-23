@@ -699,7 +699,7 @@ export function GetRandomIntInclusive(min:number, max:number):number {
   }
   
 export class Sound {
-    
+    private volume=1.0;
     private audioElement:HTMLAudioElement;
 
     constructor (arg_src:string){
@@ -714,6 +714,7 @@ export class Sound {
     Play_new(){
         var audioElement=document.createElement('audio');
         audioElement.src=this.audioElement.src;
+        audioElement.volume=this.volume;
         audioElement.preload="auto";audioElement.play();
     }
     Pause(){
@@ -725,6 +726,7 @@ export class Sound {
     }
 
     SetVolume(arg_volume:number){
+        this.volume=arg_volume;
         this.audioElement.volume=arg_volume;
     }
 

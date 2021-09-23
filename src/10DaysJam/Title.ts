@@ -64,7 +64,7 @@ class FallAnimation{
 }
 
 export class TitleScene extends ButiGameLib.GameScene{
-  
+  fireBGM:ButiLib.Sound;
   transitionShoji_L:ButiGameLib.ObjectTransformMove;
   transitionShoji_R:ButiGameLib.ObjectTransformMove;
   fallPieces:FallAnimation[]=[];
@@ -74,13 +74,17 @@ export class TitleScene extends ButiGameLib.GameScene{
     OnInit():void{
 {
 
+  this.fireBGM=new ButiLib.Sound("../../sound/BGM_fire.mp3");
+  this.fireBGM.SetLoop(true);
   {
     var husumaCloseSound=new ButiLib.Sound("../../sound/husuma.mp3");
     var husumaOpenSound=new ButiLib.Sound("../../sound/husumaOpen.mp3");
     var komaput=new ButiLib.Sound("../../sound/pachinn.mp3");
+    var fireDead=new ButiLib.Sound("../../sound/fire.mp3");
     ButiLib.EventManager.RegistExEvent({handleEvent:()=>{husumaCloseSound.Play_new()}},"HusumaCloseSoundPlay","husuma");
     ButiLib.EventManager.RegistExEvent({handleEvent:()=>{husumaOpenSound.Play_new()}},"HusumaOpenSoundPlay","husuma");
     ButiLib.EventManager.RegistExEvent({handleEvent:()=>{komaput.Play_new()}},"KomaSoundPlay","koma");
+    ButiLib.EventManager.RegistExEvent({handleEvent:()=>{fireDead.Play_new()}},"FireSoundPlay","koma");
   }
 
     const geometry = new THREE.PlaneGeometry(this.drawScene.RenderTarget.width,this.drawScene.RenderTarget.height);
@@ -147,7 +151,7 @@ export class TitleScene extends ButiGameLib.GameScene{
   }
 var fire=new ButiLib.ModelWrapper();
 
-
+var preloadBoardModel=ButiLib.CreateTextureCube("../../img/10daysJam/board.png",1);
 ButiGameLib. ModelLoad('../../model/10daysJam/board_edge.gltf',fire,this.drawScene,null,new THREE.Vector3(0,0,10));
 ButiGameLib. ModelLoad('../../model/10daysJam/fire.gltf',fire,this.drawScene,null,new THREE.Vector3(0,0,10));
   {
@@ -201,6 +205,7 @@ OnEscape(){
 
   ButiLib.EventManager.RegistClickEvent({handleEvent:()=>{
     ButiLib.EventManager.ExecuteExEvent("HusumaCloseSoundPlay");
+    this.fireBGM.Play();
     ButiLib.EventManager.UnRegistClickEvent("SceneChange_TitleToPlay",document.getElementById('myCanvas'));
     ButiLib.EventManager.RegistExEvent({handleEvent:()=>{this.transitionShoji_L.Update();this.transitionShoji_R.Update()}}, "GameUpdate","TiltleShojiUpdate") 
 }},"SceneChange_TitleToPlay",document.getElementById('myCanvas'));

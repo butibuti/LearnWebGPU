@@ -94,6 +94,7 @@ export class Piece extends ButiGameLib.GameObject{
             this.currentGrid.Piece=null;
         }
         this.OnUnSet();
+        ButiLib.EventManager.ExecuteExEvent("FireSoundPlay");
     }
     OnDeadByEnemy():void{
         this.OnUnSet();
@@ -222,14 +223,17 @@ export class Piece_enemy extends Piece{
     }
 }
 
-const spawnTypeTable=[PieceType.Hu,PieceType.Hu,PieceType.Hu,PieceType.Hu,PieceType.Hu,
+const spawnTypeTable_horizontal=[PieceType.Hu,PieceType.Hu,PieceType.Hu,PieceType.Hu,PieceType.Hu,
     PieceType.Kyousha,PieceType.Kyousha,PieceType.Kyousha,
     PieceType.Keima,PieceType.Keima,PieceType.Keima,PieceType.Keima,
     PieceType.Gin,PieceType.Gin,PieceType.Gin,PieceType.Kin,PieceType.Kin,PieceType.Kaku,PieceType.Kaku,PieceType.Hisha];
-const spawnNameTable=["koma_hu","koma_hu","koma_hu","koma_hu","koma_hu",
-    "koma_kyosha","koma_kyosha","koma_kyosha",
-    "koma_keima","koma_keima","koma_keima","koma_keima",
-    "koma_gin","koma_gin","koma_gin","koma_kin","koma_kin","koma_kaku","koma_kaku","koma_hisha"];
+const spawnTypeTable_vertical=[PieceType.Hu,
+        PieceType.Keima,PieceType.Keima,
+        PieceType.Gin,PieceType.Gin,PieceType.Gin,PieceType.Gin,PieceType.Gin,PieceType.Gin,
+        PieceType.Kin,PieceType.Kin,PieceType.Kin,PieceType.Kin,
+        PieceType.Kaku,PieceType.Kaku,PieceType.Kaku,PieceType.Kaku,
+        PieceType.Hisha,PieceType.Hisha,PieceType.Hisha];
+const spawnNameTable=["koma_hu","koma_kyosha","koma_keima","koma_kin","koma_gin","koma_kaku","koma_hisha"];
 
 export class PieceManager extends ButiGameLib.GameObject{
 
@@ -269,7 +273,7 @@ export class PieceManager extends ButiGameLib.GameObject{
             
             if(r>0.9-ButiLib.Clamp( score*0.02, 0,0.4)){
                 const enemyPattern=ButiLib.GetRandomInt(0,20);
-                this.AddEnemy(new Piece_enemy(this, spawnTypeTable[enemyPattern], this.player, spawnNameTable[enemyPattern],this.spawnedCount,this.scene,this.gridManager,i,this.gridManager.VerticalEndIndex))
+                this.AddEnemy(new Piece_enemy(this, spawnTypeTable_vertical[enemyPattern], this.player, spawnNameTable[spawnTypeTable_vertical[enemyPattern]],this.spawnedCount,this.scene,this.gridManager,i,this.gridManager.VerticalEndIndex))
                 this.spawnedCount++;
             }
 
@@ -283,11 +287,11 @@ export class PieceManager extends ButiGameLib.GameObject{
 
         //
         for(var i=this.gridManager.VerticalStartIndex+1;i< this.gridManager.VerticalEndIndex;i++){
-            const r=(Math.random()* Easing.EaseInOutExpo( score*0.01));
+            const r=(Math.random()* Easing.EaseInOutExpo( score*0.1));
 
             if(r>0.9-ButiLib.Clamp( score*0.02, 0,0.4)){
                 const enemyPattern=ButiLib.GetRandomInt(0,20);
-                this.AddEnemy(new Piece_enemy(this, spawnTypeTable[enemyPattern], this.player, spawnNameTable[enemyPattern],this.spawnedCount,this.scene,this.gridManager,this.gridManager.HorizontalEndIndex,i))
+                this.AddEnemy(new Piece_enemy(this, spawnTypeTable_horizontal[enemyPattern], this.player, spawnNameTable[spawnTypeTable_horizontal[enemyPattern]],this.spawnedCount,this.scene,this.gridManager,this.gridManager.HorizontalEndIndex,i))
                 this.spawnedCount++;
             }
 
@@ -378,6 +382,7 @@ export class Piece_Player extends Piece{
     }
     OnDeadByFire():void{
         ButiLib.EventManager.ExecuteExEvent("PlayerDeadByFire");
+        ButiLib.EventManager.ExecuteExEvent("FireSoundPlay");
     }
     OnDeadByEnemy(){
         ButiLib.EventManager.ExecuteExEvent("PlayerDeadByEnemy");
