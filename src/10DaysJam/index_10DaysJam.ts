@@ -91,10 +91,6 @@ function init() {
   const clock = new THREE.Clock();
 
   
-  const downloadButton=document.getElementById("dwonloadButton") as HTMLInputElement;
-  
-  downloadButton.addEventListener("click",()=>{renderer.CanvasDownload("Image.png",cameraEditScene. postDrawScene,cameraEditScene.postCamera);},true);
-
   tick();
 
   function tick() {
