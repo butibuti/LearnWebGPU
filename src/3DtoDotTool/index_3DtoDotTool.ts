@@ -124,8 +124,8 @@ class OutlineUniform extends ButiLib.IObject{
     }
     this.range=document.getElementById("outlineOffset")as HTMLInputElement;
     this.color=document.getElementById("outlineColor") as HTMLInputElement;
-    ButiLib.EventManager.RegistMouseMoveEvent(this,"range",this.range);
-    ButiLib.EventManager.RegistInputChangeEvent(this,"color",this.color);
+    ButiLib.EventManager.RegistMouseMoveIObjectEvent(this,"range",this.range);
+    ButiLib.EventManager.RegistInputChangeIObjectEvent(this,"color",this.color);
     this.range.value=(this.value.offset.value*1000).toString();
   }
 }
@@ -143,8 +143,8 @@ function init() {
 
 
   // シーンを作成
-  const scene = new ButiLib. SceneWrapper();
-  const subScene = new ButiLib.SceneWrapper();
+  const scene = new ButiLib. SceneWrapper(true,width,height);
+  const subScene = new ButiLib.SceneWrapper(false);
 
 var renderTarget = new THREE.WebGLRenderTarget(width/8, height/8,{
 
@@ -206,10 +206,10 @@ var outlineModel:THREE.Object3D;
 
   var cameraController=new EditorCameraMan(camera);
 
-  ButiLib.EventManager.RegistMousePushEvent(cameraController,"cameraController",canvas);
-  ButiLib.EventManager.RegistMouseReleaseEvent(cameraController,"cameraController",canvas);
-  ButiLib.EventManager.RegistMouseMoveEvent(cameraController,"cameraController",canvas);
-  ButiLib.EventManager.RegistWheelEvent(cameraController,"cameraController",canvas);
+  ButiLib.EventManager.RegistMousePushIObjectEvent(cameraController,"cameraController",canvas);
+  ButiLib.EventManager.RegistMouseReleaseIObjectEvent(cameraController,"cameraController",canvas);
+  ButiLib.EventManager.RegistMouseMoveIObjectEvent(cameraController,"cameraController",canvas);
+  ButiLib.EventManager.RegistWheelIObjectEvent(cameraController,"cameraController",canvas);
   
   let clock = new THREE.Clock();
 

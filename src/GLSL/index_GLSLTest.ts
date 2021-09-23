@@ -73,7 +73,7 @@ function init() {
     context.clearColor(0.0, 0.0, 0.0, 1.0);
     var listner=new MouseListner();
 
-    ButiLib.EventManager.RegistMouseMoveEvent(listner,"listner",c);
+    ButiLib.EventManager.RegistMouseMoveIObjectEvent(listner,"listner",c);
 
     var startTime = new Date().getTime();
     
