@@ -97,8 +97,9 @@ export class GamePlayScene extends ButiGameLib.GameScene{
     }
     OnChange():void{
       
+  ButiLib.EventManager.ExecuteExEvent("HusumaOpenSoundPlay");
         this.gridManager.Generate();
-        this.playersPiece=new Piece.Piece_Player(0,this,this.gridManager,3,3,this.gamePlayCameraControler);
+        this.playersPiece=new Piece.Piece_Player(0,this,this.gridManager,6,5,this.gamePlayCameraControler);
         this.playersPiece.OnSet();
         this.gamePlayCameraControler.CameraPosition=new THREE.Vector3 (-12,20,27);
         this.gamePlayCameraControler.TargetPosition.set(this.playersPiece.currentPosition.x,20,this.playersPiece.currentPosition.z+20);
@@ -271,6 +272,8 @@ ButiLib.EventManager.RegistExEvent({handleEvent:()=>{
 }
 OnChange():void{
 
+  
+  ButiLib.EventManager.ExecuteExEvent("HusumaOpenSoundPlay");
   if(!this.fireEffect){
     
   this.fireEffect=new Effect.Fire(this,"Fire");

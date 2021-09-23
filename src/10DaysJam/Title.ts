@@ -44,12 +44,12 @@ class FallAnimation{
   }
 
   RegistEvent(){
-    this.model.threeObj.position.set(ButiLib.GetRandomArbitrary(-5,5),ButiLib.GetRandomArbitrary(5,7),ButiLib.GetRandomArbitrary(-20,-3));
+    this.model.threeObj.position.set(ButiLib.GetRandomArbitrary(-5,5),ButiLib.GetRandomArbitrary(7,9),ButiLib.GetRandomArbitrary(-20,-3));
     this.speed=-Math.abs( this.model.threeObj.position.z)*0.02;
     ButiLib.EventManager.RegistExEvent({handleEvent:()=>
       {
         if(this.model.threeObj.position.y<-8){
-          this.model.threeObj.position.set(ButiLib.GetRandomArbitrary(-5,5),ButiLib.GetRandomArbitrary(5,7),ButiLib.GetRandomArbitrary(-20,-3));
+          this.model.threeObj.position.set(ButiLib.GetRandomArbitrary(-5,5),ButiLib.GetRandomArbitrary(7,9),ButiLib.GetRandomArbitrary(-20,-3));
         }
         this.model.threeObj.rotateOnWorldAxis(this.rotation,this.rotationSpeed);
         this.model.threeObj.position.add(new THREE.Vector3(0,this.speed,0));

@@ -96,8 +96,8 @@ export class Grid extends ButiGameLib.GameObject{
     set Piece(arg_piece:Peice.Piece){this.peice=arg_piece;}
 
 }
-const buffer=3;
-const size=12;
+const buffer=5;
+const size=15;
 export class GridManager extends ButiGameLib.GameObject{
     private horizontalStartIndex:number=0;
     private horizontalEndIndex:number =size ;
