@@ -1,0 +1,27 @@
+<%- include( '../templates/headInclude',{absPath:"pages/games/index"}) %>
+<%- include("../templates/navBar",null) %>
+  <body class="container-fluid " >
+    <main class=" mx-2 " data-aos="fade-in">
+        <div >
+          <div class="p-3 p-sm-5 my-4 rounded theme2 text-center">
+            <h1>落ち延び将棋</h1>
+          </div>
+        </div>
+        
+    </main>
+      <br>
+    <div class="container justify-content-center text-center" data-aos="fade-in">
+
+      <div class="movie-wrap">
+        <a href='/jam/Left'><img src="../../img/ochinobi.png"  class="w-100" alt="ochinobi"></a>
+      </div>
+      
+    </div>
+    <div class ="container pad50" data-aos="fade-in">
+      <p>三年生の10日間ゲームジャムで制作したゲームです。</p>
+      テーマが「左」だったので左に逃げ続ける将棋を作りました。<br>
+      Three.jsとTypeScriptで制作しました。<br>
+      <a href='/jam/Left'>ここから</a>遊べます。<br>
+    </div>
+  </body>
+  <%- include("../templates/footer",{right:"© 2021 Buti_PG"}) %>

@@ -1,8 +1,40 @@
 <%- include( '../templates/headInclude',{absPath:"pages/games/index"}) %>
 <%- include("../templates/navBar",null) %>
 <body class="container-fluid " >
-    <main class="text-center"  data-aos="fade-in">
-        <h1>-Games-</h1>
+    <main >
+      <div class="text-center"  data-aos="fade-in">
+        <h1>-三年生-</h1>
+    <div class="container pad5">
+      
+      <div id="carousel" class="carousel slide col-sm " data-bs-ride="carousel" interval="2000" mx-300>
+        <ol class="carousel-indicators">
+          <li data-bs-target="#carousel" data-bs-slide-to="0" class="active"></li>
+          <li data-bs-target="#carousel" data-bs-slide-to="1"></li>
+          <li data-bs-target="#carousel" data-bs-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <a href="/games/game_choose/"><img src="../img/Choose/screenshot_00.png"  class="d-block w-100" alt="choose"></a>
+          </div>
+          <div class="carousel-item">
+            <a href="/games/game_ochinobi/"><img src="../img/ochinobi.png"  class="d-block w-100" alt="ochinobi"></a>
+          </div>
+          
+        </div>
+        <a class="carousel-control-prev" href="#carousel" role="button" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carousel" role="button" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </a>
+      </div>
+    </div>
+      </div>
+      
+      <div class="text-center"  data-aos="fade-in">
+        <h1>-二年生-</h1>
     <div class="container pad5">
       
       <div id="carousel" class="carousel slide col-sm " data-bs-ride="carousel" interval="2000" mx-300>
@@ -32,7 +64,7 @@
         </a>
       </div>
     </div>
-    
+      </div>
 </main>
   </body>
   <%- include("../templates/footer",{right:"© 2021 Buti_PG"}) %>

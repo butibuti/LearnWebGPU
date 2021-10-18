@@ -235,20 +235,20 @@ export function CreateTexturePlane(arg_texturePath:string,arg_width:number,arg_h
 }
 
 class EventMessenger{
-    map_events=new Map<String,{handleEvent: () => void;}>();
+    map_events=new Map<String,{handleEvent: () => void}>();
 }
 export class  EventManager{
-    private static map_mouseClickEvent=new Map<String,{handleEvent: (event: MouseEvent) => void;}>();
-    private static map_mousePushEvent=new Map<String,{handleEvent: (event: MouseEvent) => void;}>();
-    private static map_mouseReleaseEvent=new Map<String,{handleEvent: (event: MouseEvent) => void;}>();
-    private static map_mouseMoveEvent=new Map<String,{handleEvent: (event: MouseEvent) => void;}>();
+    private static map_mouseClickEvent=new Map<String,{handleEvent: (event: MouseEvent) => void}>();
+    private static map_mousePushEvent=new Map<String,{handleEvent: (event: MouseEvent) => void}>();
+    private static map_mouseReleaseEvent=new Map<String,{handleEvent: (event: MouseEvent) => void}>();
+    private static map_mouseMoveEvent=new Map<String,{handleEvent: (event: MouseEvent) => void}>();
 
-    private static map_mouseWheelEvent=new Map<String,{handleEvent: (event: WheelEvent) => void;}>();
+    private static map_mouseWheelEvent=new Map<String,{handleEvent: (event: WheelEvent) => void}>();
 
-    private static map_keyPushEvent=new Map<String,{handleEvent: (event: KeyboardEvent) => void;}>();
-    private static map_keyReleaseEvent=new Map<String,{handleEvent: (event: KeyboardEvent) => void;}>();
+    private static map_keyPushEvent=new Map<String,{handleEvent: (event: KeyboardEvent) => void}>();
+    private static map_keyReleaseEvent=new Map<String,{handleEvent: (event: KeyboardEvent) => void}>();
 
-    private static map_inputChangeEvent=new Map<String,{handleEvent: (event: InputEvent) => void;}>();
+    private static map_inputChangeEvent=new Map<String,{handleEvent: (event: InputEvent) => void}>();
     private static map_exEvent=new Map<string,EventMessenger>();
 
     static RegistClickIObjectEvent(arg_obj:IObject,arg_eventName:string,target:EventTarget,isDuplicate?:boolean):string{
